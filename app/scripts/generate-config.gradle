@@ -1,0 +1,33 @@
+tasks.register("generateConfigClass", Copy) {
+    println("OUT PATH  -> \"${out_dir}/com/example/templateengineexample\"")
+    include 'my-configs.java.template'
+    into "${out_dir}/com/example/templateengineexample"
+    from "${project.projectDir}/scripts/"
+    rename { file -> "MyConfigs.java" }
+    expand (
+            package_name: app_namespace,
+            props: getProps()
+    )
+}
+
+android {
+    sourceSets {
+        main {
+            java.srcDirs += out_dir
+        }
+    }
+}
+
+afterEvaluate {
+    tasks.named("preBuild").configure {
+        dependsOn tasks.named("generateConfigClass")
+    }
+}
+
+static getProps() {
+    return [
+            "MY_STATIC_PROPERTY_ONE": "ROHIT",
+            "MY_STATIC_PROPERTY_TWO": "VALUE_TWO",
+            "MY_STATIC_PROPERTY_THREE": "VALUE_THREE"
+    ]
+}

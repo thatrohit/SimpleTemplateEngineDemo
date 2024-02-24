@@ -1,0 +1,14 @@
+/*
+ * AUTO FILE. DO NOT MODIFY
+ */
+
+package ${package_name};
+
+public final class MyConfigs {
+<% props.each { prop ->
+print("    public static final String ${prop.key}")
+print(" = ")
+print("\"${prop.value}\";")
+println();
+} %>
+}
